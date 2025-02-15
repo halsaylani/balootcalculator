@@ -61,14 +61,23 @@ class _ScoreScreenState extends State<ScoreScreen> {
   void team1QuickAdds(ScoreModel scoreModel, points) {
     scoreModel.addPointsToTeam1(points);
     scoreModel.addPointsToTeam2(0);
+    setState(() {
+      _rotationAngle -= 90;
+    });
   }
 
   void team2QuickAdds(ScoreModel scoreModel, points) {
     scoreModel.addPointsToTeam2(points);
     scoreModel.addPointsToTeam1(0);
+    setState(() {
+      _rotationAngle -= 90;
+    });
   }
 
   void addPointsFromControllers(ScoreModel scoreModel) {
+    setState(() {
+      _rotationAngle -= 90;
+    });
     final int team1Points =
         int.tryParse(Util().convertArabicToEnglishNumbers(controller1.text)) ??
             0;
