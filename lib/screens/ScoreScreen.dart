@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/ScoreModel.dart';
 import 'dqScreen.dart';
 import 'dart:async';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({super.key, required this.title});
@@ -19,6 +20,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
   final TextEditingController controller2 = TextEditingController();
   late Timer _timer;
   int _secondsPassed = 0;
+  BannerAd? _bannerAd;
+  bool _isAdLoaded = false;
 
   @override
   void initState() {
@@ -26,6 +29,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
     _startTimer();
     final scoreModel = Provider.of<ScoreModel>(context, listen: false);
     scoreModel.onWin = _showWinDialog;
+    _loadBannerAd();
   }
 
   void _startTimer() {
@@ -36,9 +40,33 @@ class _ScoreScreenState extends State<ScoreScreen> {
     });
   }
 
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId:
+          'ca-app-pub-3940256099942544/6300978111', // Replace with your actual AdMob ad unit ID
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print('Ad failed to load: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd!.load();
+  }
+
   @override
   void dispose() {
     _timer.cancel();
+    _bannerAd?.dispose();
+
     super.dispose();
   }
 
@@ -666,6 +694,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
                   },
                 ),
               ),
+              if (_isAdLoaded && _bannerAd != null)
+                SizedBox(
+                  height: _bannerAd!.size.height.toDouble(),
+                  width: _bannerAd!.size.width.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
             ],
           ),
         ),

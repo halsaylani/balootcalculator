@@ -3,8 +3,11 @@ import 'screens/ScoreScreen.dart';
 import 'package:provider/provider.dart';
 import 'models/ScoreModel.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ScoreModel(),
