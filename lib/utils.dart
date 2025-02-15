@@ -61,4 +61,28 @@ class Util {
 
     return input.split('').map((char) => arabicToEnglish[char] ?? char).join();
   }
+
+  static String getFormattedDate() {
+    DateTime now = DateTime.now();
+    return "${now.day} ${_getMonthAbbreviation(now.month)} ${now.year}";
+  }
+
+  /// Returns the abbreviated month name
+  static String _getMonthAbbreviation(int month) {
+    const List<String> months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    return months[month - 1];
+  }
 }

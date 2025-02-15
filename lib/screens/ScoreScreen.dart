@@ -28,7 +28,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
     super.initState();
     _startTimer();
     final scoreModel = Provider.of<ScoreModel>(context, listen: false);
-    scoreModel.onWin = _showWinDialog;
+    scoreModel.onWin = (winningTeam, team1Score, team2Score) {
+      _showWinDialog(winningTeam, team1Score, team2Score);
+    };
     _loadBannerAd();
   }
 
@@ -132,11 +134,24 @@ class _ScoreScreenState extends State<ScoreScreen> {
     }
   }
 
-  void _showWinDialog(String team) {
+  void _showWinDialog(String winningTeam, int team1Score, int team2Score) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         final scoreModel = Provider.of<ScoreModel>(context, listen: false);
+
+        _timer.cancel();
+
+        // Format elapsed time
+        int minutes = _secondsPassed ~/ 60;
+        int seconds = _secondsPassed % 60;
+        String formattedTime =
+            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+
+        // Determine the losing team dynamically
+        String losingTeam = winningTeam == "لنا" ? "لهم" : "لنا";
+        int winningScore = winningTeam == "لنا" ? team1Score : team2Score;
+        int losingScore = winningTeam == "لنا" ? team2Score : team1Score;
 
         return Dialog(
           backgroundColor: Util.darkCardColor,
@@ -144,33 +159,138 @@ class _ScoreScreenState extends State<ScoreScreen> {
           child: Container(
             width: Util.width(context),
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Game Over',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '$team has won the game!',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    child:
-                        const Text('OK', style: TextStyle(color: Colors.blue)),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      scoreModel.resetScores();
-                      _secondsPassed = 0;
-                    },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'انتهت الصكة',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  const Center(
+                    child: Text(
+                      ' 🥳 مبرووك فريق',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Container(
+                      width: 150,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.green, width: 2),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$winningTeam | $winningScore',
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Center(
+                    child: Text(
+                      ' 😞 هارد لك فريق ',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Container(
+                      width: 150,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.red, width: 2),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$losingTeam | $losingScore',
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[700],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${Util.getFormattedDate()} ',
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(6.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[700],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '⏳  $formattedTime ',
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: TextButton(
+                      child: const Text('صكة جديدة',
+                          style: TextStyle(color: Colors.blue)),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        scoreModel.resetScores();
+                        _startTimer();
+                        setState(() {
+                          _secondsPassed = 0;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

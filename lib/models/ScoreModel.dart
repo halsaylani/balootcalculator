@@ -16,14 +16,14 @@ class ScoreModel with ChangeNotifier {
   int get winningScore => _winningScore;
   List<int> get team1Inputs => _team1Inputs;
   List<int> get team2Inputs => _team2Inputs;
-  Function(String team)? onWin;
+  Function(String team, int team1Score, int team2Score)? onWin;
 
   void addPointsToTeam1(int points) {
     _team1History.add(_team1Score);
     _team1Score += points;
     _team1Inputs.add(points);
     if (_team1Score >= _winningScore) {
-      onWin?.call("Team 1");
+      onWin?.call("لنا", _team1Score, _team2Score);
     }
     notifyListeners();
   }
@@ -33,7 +33,7 @@ class ScoreModel with ChangeNotifier {
     _team2Score += points;
     _team2Inputs.add(points);
     if (_team2Score >= _winningScore) {
-      onWin?.call("Team 2");
+      onWin?.call("لهم", _team1Score, _team2Score);
     }
     notifyListeners();
   }
