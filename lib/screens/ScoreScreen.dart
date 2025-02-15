@@ -95,6 +95,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final scoreModel = Provider.of<ScoreModel>(context, listen: false);
+
         return Dialog(
           backgroundColor: Util.darkCardColor,
           insetPadding: EdgeInsets.zero,
@@ -122,7 +124,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                         const Text('OK', style: TextStyle(color: Colors.blue)),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      // scoreModel.resetScores();
+                      scoreModel.resetScores();
+                      _secondsPassed = 0;
                     },
                   ),
                 ),
