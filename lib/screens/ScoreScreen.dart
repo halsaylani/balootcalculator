@@ -69,8 +69,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
   }
 
   void addPointsFromControllers(ScoreModel scoreModel) {
-    final int team1Points = int.tryParse(controller1.text) ?? 0;
-    final int team2Points = int.tryParse(controller2.text) ?? 0;
+    final int team1Points =
+        int.tryParse(Util().convertArabicToEnglishNumbers(controller1.text)) ??
+            0;
+    final int team2Points =
+        int.tryParse(Util().convertArabicToEnglishNumbers(controller2.text)) ??
+            0;
 
     if (team1Points > 0 && team2Points <= 0) {
       scoreModel.addPointsToTeam1(team1Points);
@@ -386,6 +390,17 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.white),
+                            onChanged: (value) {
+                              final newValue =
+                                  Util().convertArabicToEnglishNumbers(value);
+                              if (newValue != value) {
+                                controller2.text = newValue;
+                                controller2.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(offset: controller2.text.length),
+                                );
+                              }
+                            },
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'أدخل الرقم ٢',
@@ -547,6 +562,17 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.white),
+                            onChanged: (value) {
+                              final newValue =
+                                  Util().convertArabicToEnglishNumbers(value);
+                              if (newValue != value) {
+                                controller1.text = newValue;
+                                controller1.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(offset: controller1.text.length),
+                                );
+                              }
+                            },
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'أدخل الرقم ١',
