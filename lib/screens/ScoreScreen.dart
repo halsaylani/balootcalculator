@@ -415,7 +415,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _rotationAngle += 90;
+                              _rotationAngle -= 90;
                             });
                           },
                           style: ElevatedButton.styleFrom(
