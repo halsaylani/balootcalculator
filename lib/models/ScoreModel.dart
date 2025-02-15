@@ -16,11 +16,15 @@ class ScoreModel with ChangeNotifier {
   int get winningScore => _winningScore;
   List<int> get team1Inputs => _team1Inputs;
   List<int> get team2Inputs => _team2Inputs;
+  Function(String team)? onWin;
+
   void addPointsToTeam1(int points) {
-    _team1History.add(_team1Score); // Save current score before changing
+    _team1History.add(_team1Score);
     _team1Score += points;
     _team1Inputs.add(points);
-
+    if (_team1Score >= _winningScore) {
+      onWin?.call("Team 1");
+    }
     notifyListeners();
   }
 
@@ -28,7 +32,9 @@ class ScoreModel with ChangeNotifier {
     _team2History.add(_team2Score);
     _team2Score += points;
     _team2Inputs.add(points);
-
+    if (_team2Score >= _winningScore) {
+      onWin?.call("Team 2");
+    }
     notifyListeners();
   }
 
@@ -55,4 +61,14 @@ class ScoreModel with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // void onWin(int _team1Score, int _team2Score) {
+  //   if (_team1Score >= _winningScore) {
+  //     _team1Score;
+  //   }
+  //   if (_team2Score >= _winningScore) {
+  //     _team2Score;
+  //   }
+  //   notifyListeners();
+  // }
 }

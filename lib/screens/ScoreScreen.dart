@@ -24,6 +24,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
   void initState() {
     super.initState();
     _startTimer();
+    final scoreModel = Provider.of<ScoreModel>(context, listen: false);
+    scoreModel.onWin = _showWinDialog;
   }
 
   void _startTimer() {
@@ -67,10 +69,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
   }
 
   void addPointsFromControllers(ScoreModel scoreModel) {
-    final int team1Points =
-        int.tryParse(controller1.text) ?? 0; // Default to 0 if null
-    final int team2Points =
-        int.tryParse(controller2.text) ?? 0; // Default to 0 if null
+    final int team1Points = int.tryParse(controller1.text) ?? 0;
+    final int team2Points = int.tryParse(controller2.text) ?? 0;
 
     if (team1Points > 0 && team2Points <= 0) {
       scoreModel.addPointsToTeam1(team1Points);
@@ -89,6 +89,49 @@ class _ScoreScreenState extends State<ScoreScreen> {
       controller1.clear();
       controller2.clear();
     }
+  }
+
+  void _showWinDialog(String team) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Util.darkCardColor,
+          insetPadding: EdgeInsets.zero,
+          child: Container(
+            width: Util.width(context),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Game Over',
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '$team has won the game!',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                const SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    child:
+                        const Text('OK', style: TextStyle(color: Colors.blue)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      // scoreModel.resetScores();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showSettingsBottomSheet(BuildContext context) {
@@ -123,51 +166,21 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             ),
                             backgroundColor: Util.darkBgColor,
                             elevation: 0),
-                        child: const Text('الاحصائيات',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            )),
-                      ),
-                    ),
-                    Container(
-                      width: Util.width(context) / 3,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Util.darkBgColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () => print('1'),
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            backgroundColor: Util.darkBgColor,
-                            elevation: 0),
-                        child: const Text('الارشيف',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // empty container for style
-                    Container(
-                      width: Util.width(context) / 3,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: Util.darkCardColor,
-                        borderRadius: BorderRadius.circular(10),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('الارشيف',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white70,
+                                )),
+                            Text('قريبا',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white70,
+                                ))
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -197,84 +210,11 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
               ],
-            )
-
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        //   children: [
-        // Container(
-        //   height: 50,
-        //   width: 330,
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10),
-        //   ),
-        //   child: ElevatedButton(
-        //     onPressed: () => print('1'),
-        //     style: ElevatedButton.styleFrom(
-        //         shape: RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         backgroundColor: Util.darkBtColor,
-        //         elevation: 0),
-        //     child: const Text('الاحصائيات',
-        //         style: TextStyle(
-        //           fontSize: 23,
-        //           color: Colors.white,
-        //         )),
-        //   ),
-        // ),
-        //     const SizedBox(height: 15),
-        //     Container(
-        //       height: 50,
-        //       width: 330,
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(10),
-        //       ),
-        //       child: ElevatedButton(
-        // onPressed: () {
-        //   Util().pop(context);
-        //   Util().goTo(context, DqScreen());
-        // },
-        //         style: ElevatedButton.styleFrom(
-        //             shape: RoundedRectangleBorder(
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             backgroundColor: Util.darkBtColor,
-        //             elevation: 0),
-        //         child: const Text('دق الولد',
-        //             style: TextStyle(
-        //               fontSize: 23,
-        //               color: Colors.white,
-        //             )),
-        //       ),
-        //     ),
-        //     const SizedBox(height: 15),
-        //     Container(
-        //       height: 50,
-        //       width: 330,
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(10),
-        //       ),
-        //       child: ElevatedButton(
-        //         onPressed: () => print('1'),
-        //         style: ElevatedButton.styleFrom(
-        //             shape: RoundedRectangleBorder(
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             backgroundColor: Util.darkBtColor,
-        //             elevation: 0),
-        //         child: const Text('الارشيف',
-        //             style: TextStyle(
-        //               fontSize: 23,
-        //               color: Colors.white,
-        //             )),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        );
+            ));
   }
 
   @override
@@ -289,14 +229,21 @@ class _ScoreScreenState extends State<ScoreScreen> {
           elevation: 0,
           centerTitle: true,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+            TextButton(
+              child: const Text('صكة جديدة',
+                  style: TextStyle(
+                    color: Colors.white70,
+                  )),
               onPressed: () {
                 scoreModel.resetScores();
+                _secondsPassed = 0;
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.undo, color: Colors.white),
+            TextButton(
+              child: const Text('تراجع ',
+                  style: TextStyle(
+                    color: Colors.white70,
+                  )),
               onPressed: () {
                 scoreModel.undoLastAction();
               },
