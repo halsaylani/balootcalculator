@@ -130,7 +130,7 @@ class _DqScreenState extends State<DqScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Util().pop(context);
-                        Util().goTo(context, const ScoreScreen(title: 'hi'));
+                        Util().pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -138,7 +138,7 @@ class _DqScreenState extends State<DqScreen> {
                         ),
                         backgroundColor: Colors.blue,
                       ),
-                      child: const Text('ابدأ الصكه',
+                      child: const Text('ابدأ صكّة',
                           style: TextStyle(
                             color: Colors.white70,
                           )),
@@ -178,7 +178,7 @@ class _DqScreenState extends State<DqScreen> {
               },
               icon: const Icon(
                 Icons.arrow_back,
-                color: Colors.blue,
+                color: Colors.white70,
               ),
             ),
             backgroundColor: Util.darkBgColor,
@@ -235,7 +235,7 @@ class _DqScreenState extends State<DqScreen> {
                   ),
                   child: const Text('سجل',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white,
                       )),
                 ),
               ),
@@ -336,9 +336,9 @@ class _DqScreenState extends State<DqScreen> {
                     ),
                     backgroundColor: Colors.blue,
                   ),
-                  child: const Text('دق الولد',
+                  child: const Text('دِق الولد',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white,
                       )),
                 ),
               ),
