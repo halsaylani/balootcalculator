@@ -281,6 +281,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
               onPressed: () {
                 scoreModel.resetScores();
                 _secondsPassed = 0;
+                setState(() {
+                  _rotationAngle -= 90;
+                });
               },
             ),
             TextButton(
