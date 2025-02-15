@@ -5,6 +5,11 @@ import '../models/ScoreModel.dart';
 import 'dqScreen.dart';
 import 'dart:async';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'dart:typed_data';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({super.key, required this.title});
@@ -18,6 +23,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
   double _rotationAngle = 0;
   final TextEditingController controller1 = TextEditingController();
   final TextEditingController controller2 = TextEditingController();
+  final ScreenshotController screenshotController = ScreenshotController();
   late Timer _timer;
   int _secondsPassed = 0;
   BannerAd? _bannerAd;
@@ -134,6 +140,32 @@ class _ScoreScreenState extends State<ScoreScreen> {
     }
   }
 
+  Future<void> _captureAndShare() async {
+    try {
+      final Uint8List? imageBytes = await screenshotController.capture();
+
+      if (imageBytes == null) {
+        print("Screenshot failed to capture");
+        return;
+      }
+
+      // ✅ Get storage directory
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = File('${directory.path}/win_card.png');
+
+      // ✅ Save image
+      await imagePath.writeAsBytes(imageBytes);
+
+      print("Screenshot saved to: ${imagePath.path}");
+
+      // ✅ Share image
+      await Share.shareXFiles([XFile(imagePath.path)],
+          text: '🎉 تحقق من نتيجتي في اللعبة!');
+    } catch (e) {
+      print('❌ Error capturing & sharing: $e');
+    }
+  }
+
   void _showWinDialog(String winningTeam, int team1Score, int team2Score) {
     showDialog(
       context: context,
@@ -153,143 +185,160 @@ class _ScoreScreenState extends State<ScoreScreen> {
         int winningScore = winningTeam == "لنا" ? team1Score : team2Score;
         int losingScore = winningTeam == "لنا" ? team2Score : team1Score;
 
-        return Dialog(
-          backgroundColor: Util.darkCardColor,
-          insetPadding: EdgeInsets.zero,
-          child: Container(
-            width: Util.width(context),
-            padding: const EdgeInsets.all(16.0),
-            child: Padding(
+        return Screenshot(
+          controller: screenshotController,
+          child: Dialog(
+            backgroundColor: Util.darkCardColor,
+            insetPadding: EdgeInsets.zero,
+            child: Container(
+              width: Util.width(context),
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text(
-                    'انتهت الصكة',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Center(
-                    child: Text(
-                      ' 🥳 مبرووك فريق',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: Container(
-                      width: 150,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.green, width: 2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '$winningTeam | $winningScore',
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Center(
-                    child: Text(
-                      ' 😞 هارد لك فريق ',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: Container(
-                      width: 150,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.red, width: 2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '$losingTeam | $losingScore',
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[700],
-                            borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.ios_share,
+                            color: Colors.blue,
                           ),
+                          onPressed: () async {
+                            await _captureAndShare();
+                          },
+                        ),
+                        const Text(
+                          'إنتهت الصكّة',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Center(
+                      child: Text(
+                        ' 🥳 مبرووك فريق',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Container(
+                        width: 150,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.green, width: 2),
+                        ),
+                        child: Center(
                           child: Text(
-                            '${Util.getFormattedDate()} ',
+                            '$winningTeam | $winningScore',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
+                                color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(6.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[700],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Center(
+                      child: Text(
+                        ' 😞 هارد لك فريق ',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Container(
+                        width: 150,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.red, width: 2),
+                        ),
+                        child: Center(
                           child: Text(
-                            '⏳  $formattedTime ',
+                            '$losingTeam | $losingScore',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
+                                color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: TextButton(
-                      child: const Text('صكة جديدة',
-                          style: TextStyle(color: Colors.blue)),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        scoreModel.resetScores();
-                        _startTimer();
-                        setState(() {
-                          _secondsPassed = 0;
-                        });
-                      },
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '${Util.getFormattedDate()} ',
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(6.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '⏳  $formattedTime ',
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: TextButton(
+                        child: const Text('صكّة جديدة',
+                            style: TextStyle(color: Colors.blue)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          scoreModel.resetScores();
+                          _startTimer();
+                          setState(() {
+                            _secondsPassed = 0;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -394,7 +443,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
           centerTitle: true,
           actions: [
             TextButton(
-              child: const Text('صكة جديدة',
+              child: const Text('صكّة جديدة',
                   style: TextStyle(
                     color: Colors.white70,
                   )),
