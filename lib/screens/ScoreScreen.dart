@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:typed_data';
+import '../models/ThemeProvider.dart';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({super.key, required this.title});
@@ -24,6 +25,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
   final TextEditingController controller1 = TextEditingController();
   final TextEditingController controller2 = TextEditingController();
   final ScreenshotController screenshotController = ScreenshotController();
+
   late Timer _timer;
   int _secondsPassed = 0;
   BannerAd? _bannerAd;
@@ -433,19 +435,35 @@ class _ScoreScreenState extends State<ScoreScreen> {
   @override
   Widget build(BuildContext context) {
     final scoreModel = Provider.of<ScoreModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    themeProvider.updateStatusBar();
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Util.darkBgColor,
+        backgroundColor: themeProvider.bgColor, // Util.darkBgColor,
         appBar: AppBar(
-          backgroundColor: Util.darkBgColor,
+          backgroundColor: themeProvider.bgColor,
           elevation: 0,
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              themeProvider.isDarkMode ? Icons.sunny : Icons.dark_mode,
+            ),
+            color: themeProvider.text2Color,
+            iconSize: 20,
+            onPressed: () => themeProvider.toggleTheme(),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              backgroundColor: themeProvider.cardColor,
+            ),
+          ),
           actions: [
             TextButton(
-              child: const Text('صكّة جديدة',
+              child: Text('صكّة جديدة',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: themeProvider.text2Color,
                   )),
               onPressed: () {
                 scoreModel.resetScores();
@@ -456,16 +474,16 @@ class _ScoreScreenState extends State<ScoreScreen> {
               },
             ),
             TextButton(
-              child: const Text('تراجع ',
+              child: Text('تراجع ',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: themeProvider.text2Color,
                   )),
               onPressed: () {
                 scoreModel.undoLastAction();
               },
             ),
             IconButton(
-              icon: const Icon(Icons.settings, color: Colors.white),
+              icon: Icon(Icons.settings, color: themeProvider.text2Color),
               onPressed: () => _showSettingsBottomSheet(context),
             ),
           ],
@@ -486,7 +504,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             width: Util.width(context) / 3,
                             height: 100,
                             decoration: BoxDecoration(
-                              color: Util.darkCardColor,
+                              color: themeProvider.cardColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Stack(
@@ -495,9 +513,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text('لهم',
+                                    Text('لهم',
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 30)),
+                                            color: themeProvider.textColor,
+                                            fontSize: 30)),
                                     Text('${scoreModel.team2Score}',
                                         style: const TextStyle(
                                             color: Colors.green, fontSize: 25)),
@@ -507,7 +526,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                   top: -12,
                                   right: -12,
                                   child: PopupMenuButton<int>(
-                                    color: Util.darkBgColor,
+                                    color: themeProvider.bgColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -523,14 +542,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('16',
+                                            child: Text('16',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -542,14 +562,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('26',
+                                            child: Text('26',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -561,14 +582,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('44',
+                                            child: Text('44',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -591,14 +613,14 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           width: Util.width(context) / 3,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Util.darkCardColor,
+                            color: themeProvider.cardColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextField(
                             controller: controller2,
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: themeProvider.text2Color),
                             onChanged: (value) {
                               final newValue =
                                   Util().convertArabicToEnglishNumbers(value);
@@ -610,10 +632,11 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                 );
                               }
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'أدخل الرقم ٢',
-                              hintStyle: TextStyle(color: Colors.white70),
+                              hintStyle:
+                                  TextStyle(color: themeProvider.text2Color),
                             ),
                           ),
                         )
@@ -628,24 +651,24 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.all(24),
-                            backgroundColor: Colors.transparent,
-                          ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(24),
+                              backgroundColor: themeProvider.bgColor,
+                              elevation: 0),
                           child: Transform.rotate(
                             angle: _rotationAngle * 3.1415926535 / 180,
-                            child: const Icon(
+                            child: Icon(
                               Icons.arrow_downward,
-                              color: Colors.white,
+                              color: themeProvider.textColor,
                               size: 50,
                             ),
                           ),
                         ),
                         Text(formattedTime,
-                            style: const TextStyle(
-                                color: Colors.white70, fontSize: 18)),
+                            style: TextStyle(
+                                color: themeProvider.text2Color, fontSize: 18)),
                         Text('${getPointsLeftToWin(scoreModel)}',
                             style: const TextStyle(
                                 color: Colors.green, fontSize: 25)),
@@ -657,7 +680,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             width: Util.width(context) / 3,
                             height: 100,
                             decoration: BoxDecoration(
-                              color: Util.darkCardColor,
+                              color: themeProvider.cardColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Stack(
@@ -666,9 +689,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text('لنا',
+                                    Text('لنا',
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 30)),
+                                            color: themeProvider.textColor,
+                                            fontSize: 30)),
                                     Text('${scoreModel.team1Score}',
                                         style: const TextStyle(
                                             color: Colors.green, fontSize: 25)),
@@ -678,8 +702,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                   top: -12,
                                   right: -12,
                                   child: PopupMenuButton<int>(
-                                    color: Colors
-                                        .black, // Change dropdown background color
+                                    color: themeProvider
+                                        .bgColor, // Change dropdown background color
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -695,14 +719,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('16',
+                                            child: Text('16',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -714,14 +739,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('26',
+                                            child: Text('26',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -733,14 +759,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                             height: 40,
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
-                                              color: Util.darkCardColor,
+                                              color: themeProvider.cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: const Text('44',
+                                            child: Text('44',
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.white)),
+                                                    color: themeProvider
+                                                        .textColor)),
                                           ),
                                         ),
                                       ),
@@ -763,14 +790,14 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           width: Util.width(context) / 3,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Util.darkCardColor,
+                            color: themeProvider.cardColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextField(
                             controller: controller1,
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: themeProvider.textColor),
                             onChanged: (value) {
                               final newValue =
                                   Util().convertArabicToEnglishNumbers(value);
@@ -782,10 +809,11 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                 );
                               }
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'أدخل الرقم ١',
-                              hintStyle: TextStyle(color: Colors.white70),
+                              hintStyle:
+                                  TextStyle(color: themeProvider.text2Color),
                             ),
                           ),
                         )
@@ -802,20 +830,21 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     width: Util.width(context) / 4,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Util.darkCardColor,
+                      color: themeProvider.cardColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ElevatedButton(
                       onPressed: () => addPointsFromControllers(scoreModel),
                       style: ElevatedButton.styleFrom(
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        backgroundColor: Util.darkCardColor,
+                        backgroundColor: themeProvider.cardColor,
                       ),
-                      child: const Text('سجل',
+                      child: Text('سجل',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: themeProvider.text2Color,
                           )),
                     ),
                   ),
@@ -839,15 +868,16 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             child: Center(
                               child: Text(
                                 team2Score,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 30),
+                                style: TextStyle(
+                                    color: themeProvider.textColor,
+                                    fontSize: 30),
                               ),
                             ),
                           ),
                           // Divider between columns
                           Container(
                             width: 1,
-                            color: Util.darkCardColor,
+                            color: themeProvider.cardColor,
                             margin: const EdgeInsets.symmetric(vertical: 5),
                           ),
 
@@ -855,8 +885,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             child: Center(
                               child: Text(
                                 team1Score,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 30),
+                                style: TextStyle(
+                                    color: themeProvider.textColor,
+                                    fontSize: 30),
                               ),
                             ),
                           ),

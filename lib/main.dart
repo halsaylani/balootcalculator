@@ -4,13 +4,20 @@ import 'package:provider/provider.dart';
 import 'models/ScoreModel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'models/ThemeProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MobileAds.instance.initialize();
+
+  final themeProvider = ThemeProvider();
+  themeProvider.updateStatusBar();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ScoreModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ScoreModel()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
       child: const BalootApp(),
     ),
   );

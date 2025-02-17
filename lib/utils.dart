@@ -4,13 +4,17 @@ class Util {
   //light theme
   static const bgColor = Color(0xFFFFFFFF);
   static const textColor = Color(0xFF000000);
-  static const cardColor = Color(0xFFF1F2F4);
+  static const text2Color = Color(0xFF000000);
+
+  static const cardColor = Color(0xFFF7F8FA); //Color(0xFFF2F1F5);
   static const statusColor = Color(0xFFF3F0FB);
   static const btColor = Color(0xFF7460EE);
 
   //dark theme
   static const darkBgColor = Color(0xFF000000);
   static const darkTextColor = Color(0xFFFFFFFF);
+  static const darkText2Color = Color(0xB3FFFFFF);
+
   static const darkCardColor = Color(0xFF1C1C1E);
   static const darkBtColor = Color(0xFF3E3E40);
   static const darkStatusColor = Color(0xFF2A2D3E);
