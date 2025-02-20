@@ -3,6 +3,8 @@ import 'package:balootcalculator/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'dart:math';
+import '../models/ThemeProvider.dart';
+import 'package:provider/provider.dart';
 
 class DqScreen extends StatefulWidget {
   @override
@@ -34,6 +36,8 @@ class _DqScreenState extends State<DqScreen> {
   }
 
   void openBottomSheet() async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     // Hide keyboard
     Util().hideKeyboard(context);
     if (players.length >= 4) {
@@ -42,9 +46,9 @@ class _DqScreenState extends State<DqScreen> {
         context: context,
         barrierDismissible: false, // Prevent dismissing the dialog
         builder: (BuildContext context) {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
-              color: Colors.blue, // Loader color
+              color: themeProvider.text2Color, // Loader color
             ),
           );
         },
@@ -66,7 +70,7 @@ class _DqScreenState extends State<DqScreen> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        backgroundColor: Util.darkCardColor,
+        backgroundColor: themeProvider.cardColor,
         constraints: BoxConstraints(
             // maxHeight: MediaQuery.of(context).size.height / 1,
             minWidth: MediaQuery.of(context).size.width),
@@ -88,7 +92,8 @@ class _DqScreenState extends State<DqScreen> {
                   top: 100,
                   child: Text(
                     selectedPlayers[0],
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        color: themeProvider.text2Color, fontSize: 20),
                   ),
                 ),
 
@@ -97,7 +102,8 @@ class _DqScreenState extends State<DqScreen> {
                   bottom: 100,
                   child: Text(
                     selectedPlayers[1],
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        color: themeProvider.text2Color, fontSize: 20),
                   ),
                 ),
 
@@ -106,7 +112,8 @@ class _DqScreenState extends State<DqScreen> {
                   left: 40,
                   child: Text(
                     selectedPlayers[2],
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        color: themeProvider.text2Color, fontSize: 20),
                   ),
                 ),
 
@@ -115,7 +122,8 @@ class _DqScreenState extends State<DqScreen> {
                   right: 40,
                   child: Text(
                     selectedPlayers[3],
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(
+                        color: themeProvider.text2Color, fontSize: 20),
                   ),
                 ),
                 Positioned(
@@ -138,7 +146,7 @@ class _DqScreenState extends State<DqScreen> {
                         ),
                         backgroundColor: Colors.blue,
                       ),
-                      child: const Text('ابدأ صكّة',
+                      child: const Text('ابدأ الصكّة',
                           style: TextStyle(
                             color: Colors.white70,
                           )),
@@ -166,22 +174,24 @@ class _DqScreenState extends State<DqScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    themeProvider.updateStatusBar();
     return GestureDetector(
       onTap: () => Util().hideKeyboard(context),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Util.darkBgColor,
+          backgroundColor: themeProvider.bgColor,
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
                 Util().pop(context);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back,
-                color: Colors.white70,
+                color: themeProvider.text2Color,
               ),
             ),
-            backgroundColor: Util.darkBgColor,
+            backgroundColor: themeProvider.bgColor,
           ),
           resizeToAvoidBottomInset: false,
           body: Column(
@@ -189,8 +199,8 @@ class _DqScreenState extends State<DqScreen> {
               const SizedBox(height: 50),
               Text(
                 players.length.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: themeProvider.textColor,
                   fontSize: 30,
                 ),
               ),
@@ -198,7 +208,7 @@ class _DqScreenState extends State<DqScreen> {
                 width: Util.width(context) / 1.5,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Util.darkCardColor,
+                  color: themeProvider.cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
@@ -209,11 +219,11 @@ class _DqScreenState extends State<DqScreen> {
                   },
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.name,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
+                  style: TextStyle(color: themeProvider.textColor),
+                  decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'اسم اللاعب',
-                    hintStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: themeProvider.text2Color),
                   ),
                 ),
               ),
@@ -233,7 +243,7 @@ class _DqScreenState extends State<DqScreen> {
                     ),
                     backgroundColor: Colors.blue,
                   ),
-                  child: const Text('سجل',
+                  child: Text('سجل',
                       style: TextStyle(
                         color: Colors.white,
                       )),
@@ -246,10 +256,10 @@ class _DqScreenState extends State<DqScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                      width: Util.width(context) / 4,
+                      width: Util.width(context) / 3,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Util.darkCardColor,
+                        color: themeProvider.cardColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ElevatedButton(
@@ -257,23 +267,24 @@ class _DqScreenState extends State<DqScreen> {
                           players.removeLast();
                         }),
                         style: ElevatedButton.styleFrom(
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: Util.darkCardColor,
+                          backgroundColor: themeProvider.cardColor,
                         ),
-                        child: const Text('تراجع',
+                        child: Text('تراجع',
                             style: TextStyle(
-                              color: Colors.white70,
+                              color: themeProvider.text2Color,
                             )),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Container(
-                      width: Util.width(context) / 4,
+                      width: Util.width(context) / 3,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Util.darkCardColor,
+                        color: themeProvider.cardColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ElevatedButton(
@@ -281,14 +292,15 @@ class _DqScreenState extends State<DqScreen> {
                           players.clear();
                         }),
                         style: ElevatedButton.styleFrom(
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: Util.darkCardColor,
+                          backgroundColor: themeProvider.cardColor,
                         ),
-                        child: const Text('حذف الكل',
+                        child: Text('حذف الكل',
                             style: TextStyle(
-                              color: Colors.white70,
+                              color: themeProvider.text2Color,
                             )),
                       ),
                     ),
@@ -302,16 +314,16 @@ class _DqScreenState extends State<DqScreen> {
                     return Padding(
                       padding: const EdgeInsets.only(right: 30.0),
                       child: ListTile(
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.circle,
-                          color: Util.darkCardColor,
-                          size: 20,
+                          color: themeProvider.cardColor,
+                          size: 15,
                         ),
                         title: Text(
                           players[index],
                           textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: themeProvider.textColor,
                             fontSize: 30,
                           ),
                         ),
