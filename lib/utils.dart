@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class Util {
   //light theme
-  static const bgColor = Color(0xFFFFFFFF);
+  static const bgColor = Color(0xFFF2F2F2);
   static const textColor = Color(0xFF000000);
-  static const text2Color = Color(0xFF000000);
+  static const text2Color = Color(0xFF9199A1);
 
-  static const cardColor = Color(0xFFF7F8FA); //Color(0xFFF2F1F5);
+  static const cardColor = Color(0xFFFFFFFF);
   static const statusColor = Color(0xFFF3F0FB);
   static const btColor = Color(0xFF7460EE);
 

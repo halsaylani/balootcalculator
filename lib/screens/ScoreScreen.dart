@@ -350,12 +350,14 @@ class _ScoreScreenState extends State<ScoreScreen> {
   }
 
   void _showSettingsBottomSheet(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        backgroundColor: Util.darkCardColor,
+        backgroundColor: themeProvider.cardColor,
         constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height / 1.9,
             minWidth: MediaQuery.of(context).size.width),
@@ -370,7 +372,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                       width: Util.width(context) / 3,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Util.darkBgColor,
+                        color: themeProvider.bgColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ElevatedButton(
@@ -379,20 +381,20 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            backgroundColor: Util.darkBgColor,
+                            backgroundColor: themeProvider.bgColor,
                             elevation: 0),
-                        child: const Column(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('الارشيف',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.white70,
+                                  color: themeProvider.textColor,
                                 )),
                             Text('قريبا',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.white70,
+                                  color: themeProvider.textColor,
                                 ))
                           ],
                         ),
@@ -402,7 +404,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                       width: Util.width(context) / 3,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Util.darkBgColor,
+                        color: themeProvider.bgColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ElevatedButton(
@@ -414,12 +416,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            backgroundColor: Util.darkBgColor,
+                            backgroundColor: themeProvider.bgColor,
                             elevation: 0),
-                        child: const Text('دق الولد',
+                        child: Text('دق الولد',
                             style: TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
+                              color: themeProvider.textColor,
                             )),
                       ),
                     ),
@@ -483,7 +485,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.settings, color: themeProvider.text2Color),
+              icon: Icon(Icons.settings_outlined,
+                  size: 20, color: themeProvider.text2Color),
               onPressed: () => _showSettingsBottomSheet(context),
             ),
           ],
@@ -869,7 +872,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                               child: Text(
                                 team2Score,
                                 style: TextStyle(
-                                    color: themeProvider.textColor,
+                                    color: themeProvider.text2Color,
                                     fontSize: 30),
                               ),
                             ),
@@ -877,7 +880,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           // Divider between columns
                           Container(
                             width: 1,
-                            color: themeProvider.cardColor,
+                            color: themeProvider.text2Color,
                             margin: const EdgeInsets.symmetric(vertical: 5),
                           ),
 
@@ -886,7 +889,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                               child: Text(
                                 team1Score,
                                 style: TextStyle(
-                                    color: themeProvider.textColor,
+                                    color: themeProvider.text2Color,
                                     fontSize: 30),
                               ),
                             ),
