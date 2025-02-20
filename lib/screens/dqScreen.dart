@@ -178,23 +178,23 @@ class _DqScreenState extends State<DqScreen> {
     themeProvider.updateStatusBar();
     return GestureDetector(
       onTap: () => Util().hideKeyboard(context),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: themeProvider.bgColor,
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Util().pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: themeProvider.text2Color,
-              ),
+      child: Scaffold(
+        backgroundColor: themeProvider.bgColor,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Util().pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: themeProvider.text2Color,
             ),
-            backgroundColor: themeProvider.bgColor,
           ),
-          resizeToAvoidBottomInset: false,
-          body: Column(
+          backgroundColor: themeProvider.bgColor,
+        ),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Column(
             children: [
               const SizedBox(height: 50),
               Text(

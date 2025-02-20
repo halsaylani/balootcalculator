@@ -447,7 +447,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     themeProvider.updateStatusBar();
 
-    return SafeArea(
+    return GestureDetector(
+      onTap: () => Util().hideKeyboard(context),
       child: Scaffold(
         backgroundColor: themeProvider.bgColor, // Util.darkBgColor,
         appBar: AppBar(
@@ -470,6 +471,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
           ),
           actions: [
             TextButton(
+              style: ButtonStyle(
+                overlayColor: WidgetStateProperty.all(
+                    Colors.transparent), // Removes the default press effect
+                shadowColor: WidgetStateProperty.all(
+                    Colors.transparent), // Removes shadow
+              ),
               child: Text('صكّة جديدة',
                   style: TextStyle(
                     color: themeProvider.text2Color,
@@ -483,6 +490,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
               },
             ),
             TextButton(
+              style: ButtonStyle(
+                overlayColor: WidgetStateProperty.all(
+                    Colors.transparent), // Removes the default press effect
+                shadowColor: WidgetStateProperty.all(
+                    Colors.transparent), // Removes shadow
+              ),
               child: Text('تراجع ',
                   style: TextStyle(
                     color: themeProvider.text2Color,
@@ -498,8 +511,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
             ),
           ],
         ),
-        body: GestureDetector(
-          onTap: () => Util().hideKeyboard(context),
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
