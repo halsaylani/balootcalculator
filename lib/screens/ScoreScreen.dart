@@ -352,7 +352,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
 
   void _showSettingsBottomSheet(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-
+    FocusScope.of(context).requestFocus(FocusNode());
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -544,8 +544,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       onOpened: () {
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode()); // ✅ Force unfocus before opening
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
                                       },
                                       onSelected: (value) {
                                         team2QuickAdds(scoreModel, value);
@@ -674,6 +674,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                                 ),
                                 padding: const EdgeInsets.all(24),
                                 backgroundColor: themeProvider.bgColor,
+                                overlayColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
                                 elevation: 0),
                             child: Transform.rotate(
                               angle: _rotationAngle * 3.1415926535 / 180,
@@ -867,8 +869,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: themeProvider.cardColor,
-                          overlayColor:
-                              Colors.transparent, // ✅ Fixes deprecation warning
+                          overlayColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                         ),
                         child: Text('سجل',
