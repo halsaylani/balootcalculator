@@ -243,7 +243,7 @@ class _DqScreenState extends State<DqScreen> {
                     ),
                     backgroundColor: Colors.blue,
                   ),
-                  child: Text('سجل',
+                  child: const Text('سجل',
                       style: TextStyle(
                         color: Colors.white,
                       )),
@@ -264,7 +264,9 @@ class _DqScreenState extends State<DqScreen> {
                       ),
                       child: ElevatedButton(
                         onPressed: () => setState(() {
-                          players.removeLast();
+                          if (players.isNotEmpty) {
+                            players.removeLast();
+                          }
                         }),
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
