@@ -272,6 +272,9 @@ class _DqScreenState extends State<DqScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: themeProvider.cardColor,
+                          overlayColor:
+                              Colors.transparent, // ✅ Fixes deprecation warning
+                          shadowColor: Colors.transparent,
                         ),
                         child: Text('تراجع',
                             style: TextStyle(
@@ -297,6 +300,9 @@ class _DqScreenState extends State<DqScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: themeProvider.cardColor,
+                          overlayColor:
+                              Colors.transparent, // ✅ Fixes deprecation warning
+                          shadowColor: Colors.transparent,
                         ),
                         child: Text('حذف الكل',
                             style: TextStyle(

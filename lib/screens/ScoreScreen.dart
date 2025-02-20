@@ -383,6 +383,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             backgroundColor: themeProvider.bgColor,
+                            overlayColor: Colors
+                                .transparent, // ✅ Fixes deprecation warning
+                            shadowColor: Colors.transparent,
                             elevation: 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -390,12 +393,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             Text('الارشيف',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: themeProvider.textColor,
+                                  color: themeProvider.text2Color,
                                 )),
                             Text('قريبا',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: themeProvider.textColor,
+                                  color: themeProvider.text2Color,
                                 ))
                           ],
                         ),
@@ -418,6 +421,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             backgroundColor: themeProvider.bgColor,
+                            overlayColor: Colors
+                                .transparent, // ✅ Fixes deprecation warning
+                            shadowColor: Colors.transparent,
                             elevation: 0),
                         child: Text('دق الولد',
                             style: TextStyle(
@@ -861,6 +867,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           backgroundColor: themeProvider.cardColor,
+                          overlayColor:
+                              Colors.transparent, // ✅ Fixes deprecation warning
+                          shadowColor: Colors.transparent,
                         ),
                         child: Text('سجل',
                             style: TextStyle(
