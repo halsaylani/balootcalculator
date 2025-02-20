@@ -171,9 +171,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
 
   void _showWinDialog(String winningTeam, int team1Score, int team2Score) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         final scoreModel = Provider.of<ScoreModel>(context, listen: false);
+        final themeProvider =
+            Provider.of<ThemeProvider>(context, listen: false);
 
         _timer.cancel();
 
@@ -191,7 +194,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
         return Screenshot(
           controller: screenshotController,
           child: Dialog(
-            backgroundColor: Util.darkCardColor,
+            backgroundColor: themeProvider.cardColor,
             insetPadding: EdgeInsets.zero,
             child: Container(
               width: Util.width(context),
@@ -214,23 +217,23 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             await _captureAndShare();
                           },
                         ),
-                        const Text(
+                        Text(
                           'إنتهت الصكّة',
                           textAlign: TextAlign.right,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: themeProvider.textColor,
                             fontSize: 24,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Center(
+                    Center(
                       child: Text(
                         ' 🥳 مبرووك فريق',
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: themeProvider.text2Color,
                           fontSize: 24,
                         ),
                       ),
@@ -250,19 +253,19 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           child: Text(
                             '$winningTeam | $winningScore',
                             textAlign: TextAlign.right,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
+                            style: TextStyle(
+                                color: themeProvider.textColor, fontSize: 20),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Center(
+                    Center(
                       child: Text(
                         ' 😞 هارد لك فريق ',
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: themeProvider.text2Color,
                           fontSize: 24,
                         ),
                       ),
@@ -282,8 +285,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           child: Text(
                             '$losingTeam | $losingScore',
                             textAlign: TextAlign.right,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
+                            style: TextStyle(
+                                color: themeProvider.textColor, fontSize: 20),
                           ),
                         ),
                       ),
@@ -296,14 +299,14 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                              color: Colors.grey[700],
+                              color: themeProvider.bgColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               '${Util.getFormattedDate()} ',
                               textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: themeProvider.textColor, fontSize: 18),
                             ),
                           ),
                         ),
@@ -312,14 +315,14 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(6.0),
                             decoration: BoxDecoration(
-                              color: Colors.grey[700],
+                              color: themeProvider.bgColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              '⏳  $formattedTime ',
+                              '⏳ $formattedTime ',
                               textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                  color: themeProvider.textColor, fontSize: 18),
                             ),
                           ),
                         ),
@@ -332,6 +335,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             style: TextStyle(color: Colors.blue)),
                         onPressed: () {
                           Navigator.of(context).pop();
+                          Util().hideKeyboard(context);
                           scoreModel.resetScores();
                           _startTimer();
                           setState(() {
