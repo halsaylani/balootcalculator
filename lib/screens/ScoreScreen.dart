@@ -112,7 +112,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
     });
   }
 
-  void addPointsFromControllers(ScoreModel scoreModel) {
+  void addPointsFromControllers(ScoreModel scoreModel, context) {
+    Util().hideKeyboard(context);
     setState(() {
       _rotationAngle -= 90;
     });
@@ -491,422 +492,439 @@ class _ScoreScreenState extends State<ScoreScreen> {
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Container(
-                width: Util.width(context),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            width: Util.width(context) / 3,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: themeProvider.cardColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('لهم',
-                                        style: TextStyle(
-                                            color: themeProvider.textColor,
-                                            fontSize: 30)),
-                                    Text('${scoreModel.team2Score}',
-                                        style: const TextStyle(
-                                            color: Colors.green, fontSize: 25)),
-                                  ],
-                                ),
-                                Positioned(
-                                  top: -12,
-                                  right: -12,
-                                  child: PopupMenuButton<int>(
-                                    color: themeProvider.bgColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    onSelected: (value) {
-                                      team2QuickAdds(scoreModel, value);
-                                    },
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: 16,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('16',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 26,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('26',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 44,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('44',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                    icon: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.blue,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      padding: const EdgeInsets.all(4),
-                                      child: const Icon(Icons.add,
-                                          color: Colors.white, size: 15),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: Util.width(context) / 3,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: themeProvider.cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            controller: controller2,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(color: themeProvider.text2Color),
-                            onChanged: (value) {
-                              final newValue =
-                                  Util().convertArabicToEnglishNumbers(value);
-                              if (newValue != value) {
-                                controller2.text = newValue;
-                                controller2.selection =
-                                    TextSelection.fromPosition(
-                                  TextPosition(offset: controller2.text.length),
-                                );
-                              }
-                            },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'أدخل الرقم ٢',
-                              hintStyle:
-                                  TextStyle(color: themeProvider.text2Color),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _rotationAngle -= 90;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
+        body: GestureDetector(
+          onTap: () => Util().hideKeyboard(context),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                Container(
+                  width: Util.width(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                              width: Util.width(context) / 3,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: themeProvider.cardColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              padding: const EdgeInsets.all(24),
-                              backgroundColor: themeProvider.bgColor,
-                              elevation: 0),
-                          child: Transform.rotate(
-                            angle: _rotationAngle * 3.1415926535 / 180,
-                            child: Icon(
-                              Icons.arrow_downward,
-                              color: themeProvider.textColor,
-                              size: 50,
-                            ),
-                          ),
-                        ),
-                        Text(formattedTime,
-                            style: TextStyle(
-                                color: themeProvider.text2Color, fontSize: 18)),
-                        Text('${getPointsLeftToWin(scoreModel)}',
-                            style: const TextStyle(
-                                color: Colors.green, fontSize: 25)),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
+                              child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('لهم',
+                                          style: TextStyle(
+                                              color: themeProvider.textColor,
+                                              fontSize: 30)),
+                                      Text('${scoreModel.team2Score}',
+                                          style: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 25)),
+                                    ],
+                                  ),
+                                  Positioned(
+                                    top: -12,
+                                    right: -12,
+                                    child: PopupMenuButton<int>(
+                                      color: themeProvider.bgColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      onOpened: () {
+                                        FocusScope.of(context).requestFocus(
+                                            FocusNode()); // ✅ Force unfocus before opening
+                                      },
+                                      onSelected: (value) {
+                                        team2QuickAdds(scoreModel, value);
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 16,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('16',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 26,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('26',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 44,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('44',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      icon: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(4),
+                                        child: const Icon(Icons.add,
+                                            color: Colors.white, size: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          const SizedBox(height: 10),
+                          Container(
                             width: Util.width(context) / 3,
-                            height: 100,
+                            height: 50,
                             decoration: BoxDecoration(
                               color: themeProvider.cardColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('لنا',
-                                        style: TextStyle(
-                                            color: themeProvider.textColor,
-                                            fontSize: 30)),
-                                    Text('${scoreModel.team1Score}',
-                                        style: const TextStyle(
-                                            color: Colors.green, fontSize: 25)),
-                                  ],
-                                ),
-                                Positioned(
-                                  top: -12,
-                                  right: -12,
-                                  child: PopupMenuButton<int>(
-                                    color: themeProvider
-                                        .bgColor, // Change dropdown background color
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    onSelected: (value) {
-                                      team1QuickAdds(scoreModel, value);
-                                    },
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        value: 16,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('16',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 26,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('26',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        value: 44,
-                                        child: Center(
-                                          child: Container(
-                                            width: 50,
-                                            height: 40,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: themeProvider.cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text('44',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: themeProvider
-                                                        .textColor)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                    icon: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.blue,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      padding: const EdgeInsets.all(4),
-                                      child: const Icon(Icons.add,
-                                          color: Colors.white, size: 15),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: Util.width(context) / 3,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: themeProvider.cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextField(
-                            controller: controller1,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(color: themeProvider.textColor),
-                            onChanged: (value) {
-                              final newValue =
-                                  Util().convertArabicToEnglishNumbers(value);
-                              if (newValue != value) {
-                                controller1.text = newValue;
-                                controller1.selection =
-                                    TextSelection.fromPosition(
-                                  TextPosition(offset: controller1.text.length),
-                                );
-                              }
+                            child: TextField(
+                              controller: controller2,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(color: themeProvider.text2Color),
+                              onChanged: (value) {
+                                final newValue =
+                                    Util().convertArabicToEnglishNumbers(value);
+                                if (newValue != value) {
+                                  controller2.text = newValue;
+                                  controller2.selection =
+                                      TextSelection.fromPosition(
+                                    TextPosition(
+                                        offset: controller2.text.length),
+                                  );
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'أدخل الرقم ٢',
+                                hintStyle:
+                                    TextStyle(color: themeProvider.text2Color),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _rotationAngle -= 90;
+                              });
                             },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'أدخل الرقم ١',
-                              hintStyle:
-                                  TextStyle(color: themeProvider.text2Color),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(24),
+                                backgroundColor: themeProvider.bgColor,
+                                elevation: 0),
+                            child: Transform.rotate(
+                              angle: _rotationAngle * 3.1415926535 / 180,
+                              child: Icon(
+                                Icons.arrow_downward,
+                                color: themeProvider.textColor,
+                                size: 50,
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                          Text(formattedTime,
+                              style: TextStyle(
+                                  color: themeProvider.text2Color,
+                                  fontSize: 18)),
+                          Text('${getPointsLeftToWin(scoreModel)}',
+                              style: const TextStyle(
+                                  color: Colors.green, fontSize: 25)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                              width: Util.width(context) / 3,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: themeProvider.cardColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('لنا',
+                                          style: TextStyle(
+                                              color: themeProvider.textColor,
+                                              fontSize: 30)),
+                                      Text('${scoreModel.team1Score}',
+                                          style: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 25)),
+                                    ],
+                                  ),
+                                  Positioned(
+                                    top: -12,
+                                    right: -12,
+                                    child: PopupMenuButton<int>(
+                                      color: themeProvider
+                                          .bgColor, // Change dropdown background color
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      onOpened: () {
+                                        FocusScope.of(context).requestFocus(
+                                            FocusNode()); // ✅ Force unfocus before opening
+                                      },
+                                      onSelected: (value) {
+                                        team1QuickAdds(scoreModel, value);
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          value: 16,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('16',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 26,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('26',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 44,
+                                          child: Center(
+                                            child: Container(
+                                              width: 50,
+                                              height: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: themeProvider.cardColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text('44',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: themeProvider
+                                                          .textColor)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      icon: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(4),
+                                        child: const Icon(Icons.add,
+                                            color: Colors.white, size: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          const SizedBox(height: 10),
+                          Container(
+                            width: Util.width(context) / 3,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: themeProvider.cardColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TextField(
+                              controller: controller1,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(color: themeProvider.textColor),
+                              onChanged: (value) {
+                                final newValue =
+                                    Util().convertArabicToEnglishNumbers(value);
+                                if (newValue != value) {
+                                  controller1.text = newValue;
+                                  controller1.selection =
+                                      TextSelection.fromPosition(
+                                    TextPosition(
+                                        offset: controller1.text.length),
+                                  );
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'أدخل الرقم ١',
+                                hintStyle:
+                                    TextStyle(color: themeProvider.text2Color),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: Util.width(context) / 4,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: themeProvider.cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            addPointsFromControllers(scoreModel, context),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          backgroundColor: themeProvider.cardColor,
+                        ),
+                        child: Text('سجل',
+                            style: TextStyle(
+                              color: themeProvider.text2Color,
+                            )),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: Util.width(context) / 4,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: themeProvider.cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () => addPointsFromControllers(scoreModel),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: scoreModel.team1Inputs.length >
+                            scoreModel.team2Inputs.length
+                        ? scoreModel.team1Inputs.length
+                        : scoreModel.team2Inputs.length,
+                    itemBuilder: (context, index) {
+                      String team1Score = '${scoreModel.team1Inputs[index]}';
+                      String team2Score = '${scoreModel.team2Inputs[index]}';
+
+                      return SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  team2Score,
+                                  style: TextStyle(
+                                      color: themeProvider.text2Color,
+                                      fontSize: 30),
+                                ),
+                              ),
+                            ),
+                            // Divider between columns
+                            Container(
+                              width: 1,
+                              color: themeProvider.text2Color,
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                            ),
+
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  team1Score,
+                                  style: TextStyle(
+                                      color: themeProvider.text2Color,
+                                      fontSize: 30),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        backgroundColor: themeProvider.cardColor,
-                      ),
-                      child: Text('سجل',
-                          style: TextStyle(
-                            color: themeProvider.text2Color,
-                          )),
-                    ),
+                      );
+                    },
                   ),
-                ],
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: scoreModel.team1Inputs.length >
-                          scoreModel.team2Inputs.length
-                      ? scoreModel.team1Inputs.length
-                      : scoreModel.team2Inputs.length,
-                  itemBuilder: (context, index) {
-                    String team1Score = '${scoreModel.team1Inputs[index]}';
-                    String team2Score = '${scoreModel.team2Inputs[index]}';
-
-                    return SizedBox(
-                      height: 50,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                team2Score,
-                                style: TextStyle(
-                                    color: themeProvider.text2Color,
-                                    fontSize: 30),
-                              ),
-                            ),
-                          ),
-                          // Divider between columns
-                          Container(
-                            width: 1,
-                            color: themeProvider.text2Color,
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                          ),
-
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                team1Score,
-                                style: TextStyle(
-                                    color: themeProvider.text2Color,
-                                    fontSize: 30),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
                 ),
-              ),
-              if (_isAdLoaded && _bannerAd != null)
-                SizedBox(
-                  height: _bannerAd!.size.height.toDouble(),
-                  width: _bannerAd!.size.width.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                ),
-            ],
+                if (_isAdLoaded && _bannerAd != null)
+                  SizedBox(
+                    height: _bannerAd!.size.height.toDouble(),
+                    width: _bannerAd!.size.width.toDouble(),
+                    child: AdWidget(ad: _bannerAd!),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
