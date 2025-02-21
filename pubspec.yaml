@@ -37,11 +37,32 @@ dependencies:
   share_plus: ^10.1.4
   screenshot: ^3.0.0
   path_provider: ^2.1.5
+  flutter_native_splash: ^2.4.4
+  flutter_launcher_icons: ^0.14.3
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+
+
+flutter_native_splash:
+  color: "#ffffff" # Background color
+  image: images/splash_logo_icon_4x.png # splash image
+  android: true
+  ios: true
+  fullscreen: false
+  android_12:
+    image: images/splash_logo_icon_4x.png
+    icon_background_color: "#ffffff"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/logo_icon.png" # app icon
+  adaptive_icon_foreground: "images/logo_icon.png" # Foreground image (without background)
+  adaptive_icon_background: "#ffffff" # Optional: Only for Android
+  remove_alpha_ios: true # Required to remove transparency on iOS icons
 
 dev_dependencies:
   flutter_test:
