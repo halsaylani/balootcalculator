@@ -30,7 +30,7 @@ class BalootApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'حاسبة البلوت',
       theme: ThemeData(
         textTheme: GoogleFonts.tajawalTextTheme(),
         // This is the theme of your application.
@@ -51,7 +51,7 @@ class BalootApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ScoreScreen(title: 'Flutter Demo Home Page'),
+      home: const ScoreScreen(title: 'حاسبة البلوت'),
     );
   }
 }
